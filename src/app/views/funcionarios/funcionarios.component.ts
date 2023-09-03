@@ -173,28 +173,29 @@ export class FuncionariosComponent {
     }
     
     async loadUsers(): Promise<void> {
-        console.log("aqui");
-        try {
-            const usersData: User[] | undefined = await this.loginService.getAllUsers().toPromise();
-            console.log(usersData, "FOI", this.x);
-            if (usersData !== undefined) {
-                if (this.x === undefined) {
-                    this.x = usersData.length;
-                    this.users = usersData;
-                } else {
-                    let newData: User[] | undefined;
-                    do {
-                        newData = await this.loginService.getAllUsers().toPromise();
-                    } while (this.x === newData?.length);
-                    
-                    this.users = newData || [];
-                    this.x = newData?.length;
-                }
-            }
-        } catch (error) {
-            Swal.fire('Erro', 'Ocorreu um erro ao buscar os usuários.', 'error');
-        }
-    }
+
+      try {
+          let usersData: User[] | undefined = await this.loginService.getAllUsers().toPromise();
+
+          if (usersData !== undefined) {
+              if (this.x === undefined) {
+                  this.x = usersData.length;
+                  this.users = usersData;
+              } else {
+                
+                  do {
+                      usersData = await this.loginService.getAllUsers().toPromise();
+
+                  } while (this.x != usersData?.length);
+                  
+                  this.users = usersData || [];
+                  this.x = usersData?.length;
+              }
+          }
+      } catch (error) {
+          Swal.fire('Erro', 'Ocorreu um erro ao buscar os usuários.', 'error');
+      }
+  }
     
     
 
